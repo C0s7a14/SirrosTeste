@@ -1,4 +1,4 @@
-import { Home, BookOpen, MessageSquare, Award, Settings, Users, LayoutDashboard, X } from 'lucide-react';
+import { Home, BookOpen, MessageSquare, Award, Settings, Users, LayoutDashboard, X, PlusCircle } from 'lucide-react';
 import sirrosLogo from '../../imports/logo.png';
 
 interface SidebarProps {
@@ -17,6 +17,7 @@ export function Sidebar({ currentView, onViewChange, userRole, isOpen = true, on
     { id: 'ai-support', label: 'Suporte IA', icon: MessageSquare, roles: ['student', 'admin', 'technician'] },
     { id: 'certificates', label: 'Certificados', icon: Award, roles: ['student', 'technician'] },
     { id: 'admin', label: 'Administração', icon: Users, roles: ['admin'] },
+    { id: 'create-course',label: 'Criar Curso',icon: PlusCircle, roles: ['student', 'admin', 'technician']},
   ];
 
   const filteredItems = menuItems.filter(item => item.roles.includes(userRole));

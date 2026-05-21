@@ -8,6 +8,7 @@ import { AISupport } from './components/AISupport';
 import { Certificates } from './components/Certificates';
 import { AdminPanel } from './components/AdminPanel';
 import { MyCourses } from './components/MyCourses';
+import { CreateCourse } from './components/CreateCourse';
 import { mockDevices, mockCourses, currentUser, mockCertificates } from './data/mockData';
 import { Menu } from 'lucide-react';
 
@@ -49,6 +50,9 @@ export default function App() {
 
       case 'devices':
         return <DevicesGrid devices={mockDevices} onDeviceSelect={handleDeviceSelect} />;
+
+      case 'create-course':
+      return <CreateCourse />;
 
       case 'course-list':
         if (!selectedDeviceId) return null;
