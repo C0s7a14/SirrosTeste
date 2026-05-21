@@ -1,4 +1,4 @@
-import { Home, BookOpen, MessageSquare, Award, Settings, Users, LayoutDashboard, X, PlusCircle } from 'lucide-react';
+import { Home, BookOpen, MessageSquare, Award, Settings, Users, LayoutDashboard, X, PlusCircle, LogOut } from 'lucide-react';
 import sirrosLogo from '../../imports/logo.png';
 
 interface SidebarProps {
@@ -7,18 +7,27 @@ interface SidebarProps {
   userRole: 'student' | 'admin' | 'technician';
   isOpen?: boolean;
   onClose?: () => void;
+  onLogout: () => void;
 }
 
-export function Sidebar({ currentView, onViewChange, userRole, isOpen = true, onClose }: SidebarProps) {
+export function Sidebar({  currentView,
+  onViewChange,
+  userRole,
+  isOpen = true,
+  onClose,
+  onLogout}  : SidebarProps) {
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['student', 'admin', 'technician'] },
-    { id: 'devices', label: 'Dispositivos', icon: Home, roles: ['student', 'admin', 'technician'] },
+    { id: 'dashboard', label: 'Home', icon: Home, roles: ['student', 'admin', 'technician'] },
+    { id: 'devices', label: 'Dispositivos', icon: LayoutDashboard , roles: ['student', 'admin', 'technician'] },
     { id: 'my-courses', label: 'Meus Cursos', icon: BookOpen, roles: ['student', 'technician'] },
     { id: 'ai-support', label: 'Suporte IA', icon: MessageSquare, roles: ['student', 'admin', 'technician'] },
     { id: 'certificates', label: 'Certificados', icon: Award, roles: ['student', 'technician'] },
     { id: 'admin', label: 'Administração', icon: Users, roles: ['admin'] },
     { id: 'create-course',label: 'Criar Curso',icon: PlusCircle, roles: ['student', 'admin', 'technician']},
+    {id: 'settings',label: 'Configurações',icon: Settings,roles: ['student', 'admin', 'technician']}
   ];
+
+
 
   const filteredItems = menuItems.filter(item => item.roles.includes(userRole));
 
@@ -85,17 +94,35 @@ export function Sidebar({ currentView, onViewChange, userRole, isOpen = true, on
         </ul>
       </nav>
 
-      <div className="p-4 border-t border-sidebar-border">
-        <div className="flex items-center gap-3 px-4 py-3">
-          <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-primary-foreground">
-            LS
-          </div>
-          <div className="flex-1">
-            <p className="text-sm text-sidebar-foreground">Lucas</p>
-            <p className="text-xs text-muted-foreground">CEO</p>
-          </div>
-        </div>
-      </div>
+          <div className="p-4 border-t border-sidebar-border space-y-4">
+
+  <div className="flex items-center gap-3 px-4 py-3">
+
+    <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-primary-foreground">
+      LS
+    </div>
+
+    <div className="flex-1">
+      <p className="text-sm text-sidebar-foreground">
+        Lucas
+      </p>
+
+      <p className="text-xs text-muted-foreground">
+        CEO
+      </p>
+    </div>
+  </div>
+
+  <button
+    onClick={onLogout}
+    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-white bg-red-900 hover:bg-red-600 transition-colors hover:cursor-pointer"
+  >
+    <LogOut className="w-5 h-5" />
+
+    <span>Sair da Conta</span>
+  </button>
+
+</div>
     </aside>
     </>
   );

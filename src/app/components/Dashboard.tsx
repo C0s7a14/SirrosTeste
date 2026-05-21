@@ -47,7 +47,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     <div className="p-4 md:p-8 space-y-6 md:space-y-8">
       {/* Header */}
       <div>
-        <h1 className="mb-2 text-xl md:text-2xl">Bem-vindo de volta, Lucas!</h1>
+        <h1 className="mb-2 text-xl md:text-2xl">Bem-vindo de volta, Lucas! <span className='text-blue-500'>Administrador</span></h1>
         <p className="text-muted-foreground text-sm md:text-base">
           Continue seu aprendizado e alcance seus objetivos
         </p>

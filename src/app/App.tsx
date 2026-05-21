@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import {Login} from './components/Login';
+import {Register} from './components/Registro';
+import { Settings } from './components/Settings';
 import { Sidebar } from './components/Sidebar';
 import { Dashboard } from './components/Dashboard';
 import { DevicesGrid } from './components/DevicesGrid';
@@ -23,6 +26,12 @@ export default function App() {
   const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+const [isAuthenticated, setIsAuthenticated] = useState(false);
+const [user, setUser] = useState({
+  name: '',
+  email: '',
+});
+
   const handleDeviceSelect = (deviceId: string) => {
     setSelectedDeviceId(deviceId);
     setCurrentView('course-list');
@@ -43,10 +52,59 @@ export default function App() {
     setCurrentView('course-list');
   };
 
+  const handleLogin = (email: string, password: string) => {
+  setUser({
+    name: 'Lucas',
+    email,
+  });
+
+  setIsAuthenticated(true);
+
+  setCurrentView('dashboard');
+};
+
+const handleRegister = (
+  name: string,
+  email: string,
+  password: string
+) => {
+  setUser({
+    name,
+    email,
+  });
+
+  setIsAuthenticated(true);
+
+  setCurrentView('dashboard');
+};
+
+
+const handleLogout = () => {
+  setIsAuthenticated(false);
+
+  setUser({
+    name: '',
+    email: '',
+  });
+
+  setCurrentView('login');
+};
+
   const renderContent = () => {
     switch (currentView) {
       case 'dashboard':
         return <Dashboard onNavigate={setCurrentView} />;
+
+        case 'login':
+  return <Login onLogin={handleLogin} />;
+
+      case 'register':
+  return (
+    <Register
+      onRegister={handleRegister}
+      onNavigateLogin={() => setCurrentView('login')}
+    />
+  );
 
       case 'devices':
         return <DevicesGrid devices={mockDevices} onDeviceSelect={handleDeviceSelect} />;
@@ -85,6 +143,14 @@ export default function App() {
       case 'certificates':
         return <Certificates certificates={mockCertificates} />;
 
+          case 'settings':
+            return (
+              <Settings
+                user={user}
+                onLogout={handleLogout}
+              />
+            );        
+
       case 'admin':
         return <AdminPanel />;
 
@@ -93,32 +159,53 @@ export default function App() {
     }
   };
 
+  if (!isAuthenticated && currentView !== 'register') {
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
-      <Sidebar
-        currentView={currentView}
-        onViewChange={setCurrentView}
-        userRole={currentUser.role}
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-      />
+    <Login
+      onLogin={handleLogin}
+      onNavigateRegister={() => setCurrentView('register')}
+    />
+  );
+}
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Mobile Header */}
+ return (
+  <div className="flex h-screen bg-background overflow-hidden">
+
+    {isAuthenticated && (
+      <Sidebar
+  currentView={currentView}
+  onViewChange={setCurrentView}
+  userRole={currentUser.role}
+  isOpen={isSidebarOpen}
+  onClose={() => setIsSidebarOpen(false)}
+  onLogout={handleLogout}
+/>
+    )}
+
+    <div className="flex-1 flex flex-col overflow-hidden">
+
+      {isAuthenticated && (
         <header className="lg:hidden bg-sidebar border-b border-sidebar-border p-4 flex items-center gap-3">
+
           <button
             onClick={() => setIsSidebarOpen(true)}
             className="p-2 hover:bg-sidebar-accent rounded-lg transition-colors"
           >
             <Menu className="w-6 h-6 text-sidebar-foreground" />
           </button>
-          <h2 className="text-sidebar-foreground">SIRROS IoT</h2>
-        </header>
 
-        <main className="flex-1 overflow-y-auto">
-          {renderContent()}
-        </main>
-      </div>
+          <h2 className="text-sidebar-foreground">
+            SIRROS IoT
+          </h2>
+
+        </header>
+      )}
+
+      <main className="flex-1 overflow-y-auto">
+        {renderContent()}
+      </main>
+
     </div>
-  );
+  </div>
+);
 }
